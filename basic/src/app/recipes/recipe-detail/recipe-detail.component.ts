@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Recipe } from '../recipes.model'
 import { RecipeService } from '../recipe.service';
 
@@ -9,7 +9,7 @@ import { RecipeService } from '../recipe.service';
 })
 
 export class RecipeDetailComponent {
-  @Input() recipe:Recipe;
+  recipe:Recipe;
 
 
 
