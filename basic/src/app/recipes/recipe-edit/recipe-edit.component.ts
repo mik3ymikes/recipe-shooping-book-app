@@ -8,7 +8,8 @@ import { RecipeService } from '../recipe.service';
 @Component({
   selector: 'app-recipe-edit',
   templateUrl: './recipe-edit.component.html',
-  styleUrls: ['./recipe-edit.component.css']
+  styleUrls: ['./recipe-edit.component.css'],
+  
 })
 
 
@@ -55,6 +56,13 @@ export class RecipeEditComponent implements OnInit  {
       })
     )
   }
+
+onDeleteIngredient(index:number){
+(<FormArray>this.recipeForm.get('ingredients')).removeAt(index)
+}
+
+
+
   onCancel(){
     this.router.navigate(['../'], {relativeTo: this.route})
   }
@@ -93,6 +101,11 @@ export class RecipeEditComponent implements OnInit  {
     'description': new FormControl(recipeDescription,Validators.required),
     'ingredients':recipeIngredients
   })
+  }
+
+
+  get controls() { // a getter!
+    return (<FormArray>this.recipeForm.get('ingredients')).controls;
   }
 
 }
