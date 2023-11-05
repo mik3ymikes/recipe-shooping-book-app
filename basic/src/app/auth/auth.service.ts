@@ -1,7 +1,8 @@
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { catchError } from "rxjs/operators";
-import { throwError } from "rxjs";
+import { catchError, tap } from "rxjs/operators";
+import { Subject, throwError } from "rxjs";
+import { User } from "./user.model";
 
  export interface AuthResponseData{
   kind:string;
@@ -15,6 +16,7 @@ import { throwError } from "rxjs";
 
 @Injectable({ providedIn: 'root'})
 export class AuthService {
+  user= new Subject <User>()
 
   constructor(private http: HttpClient){}
 
@@ -28,25 +30,42 @@ export class AuthService {
       returnSecureToken: true
     }
     )
-    .pipe(catchError(this.handleError)
-
+    .pipe(
+      catchError(this.handleError),
+      tap(resData =>{
+     this.handleAuthentication(resData.email, resData.localId, resData.idToken, +resData.expiresIn)
+    })
 
     )
+
+
+
   }
 
   login(email:string, password:string){
     return this.http.post <AuthResponseData>(
-      'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBzmZnMqzdkpyz6KQpzIXPkSuRmtIE-It8',
+      'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBzmZnMqzdkpyz6KQpzIXPkSuRmtIE-It8',
       {
         email: email,
         password: password,
         returnSecureToken: true
       }
       )
-     .pipe(catchError(this.handleError))
+     .pipe(catchError(this.handleError), tap(resData =>{
+      this.handleAuthentication(resData.email, resData.localId, resData.idToken, +resData.expiresIn)
+     }) )
   }
 
-
+private handleAuthentication(email:string, userId:string, token:string, expiresIn: number){
+  const exirationDate=new Date(new Date().getTime() +  expiresIn * 1000)
+  const user= new User(
+    email,
+    userId,
+    token,
+    exirationDate
+    )
+    this.user.next(user)
+}
 
   private handleError(errorRes: HttpErrorResponse){
     let errorMessage='an unknown eror occured'
