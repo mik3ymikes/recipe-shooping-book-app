@@ -58,6 +58,22 @@ export class AuthService {
      }) )
   }
 
+ autoLogin(){
+  const userData:{
+    email:string;
+    id:string;
+    _token:string;
+    _tokenExpirationDate: string;
+
+  }= JSON.parse(localStorage.getItem('userData'))
+  if(!userData) {
+    return
+  }
+  const laodedUser=new User(userData.email, userData.id, userData._token, new Date(userData._tokenExpirationDate))
+   if (laodedUser.token){
+    this.user.next(laodedUser)
+   }
+ }
 
   logout(){
     this.user.next(null)
@@ -65,18 +81,19 @@ export class AuthService {
   }
 
 private handleAuthentication(email:string, userId:string, token:string, expiresIn: number){
-  const exirationDate=new Date(new Date().getTime() +  expiresIn * 1000)
+  const expirationDate=new Date(new Date().getTime() +  expiresIn * 1000)
   const user= new User(
     email,
     userId,
     token,
-    exirationDate
+    expirationDate
     )
     this.user.next(user)
+    localStorage.setItem('userData', JSON.stringify(user))
 }
 
   private handleError(errorRes: HttpErrorResponse){
-    let errorMessage='an unknown eror occured'
+    let errorMessage='an unknown eror occured';
     if(!errorRes.error || !errorRes.error.error){
       return throwError(errorMessage)
     }
