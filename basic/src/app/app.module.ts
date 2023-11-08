@@ -12,14 +12,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 
 
-import { AuthComponent } from './auth/auth.component';
-
-import { AuthInterceptorService } from './auth/auth-interceptor.service';
 
 import { RecipesModule } from './recipes/recipes.module';
 import { ShoppingListModule } from './shopping-list/shoppling-list.module';
 import { SharedModule } from './shared/shared.module';
 import { CoreModule } from './core.module';
+import { AuthModule } from './auth/auth.module';
 
 @NgModule({
   declarations: [
@@ -27,13 +25,13 @@ import { CoreModule } from './core.module';
     HeaderComponent,
 
 
-    AuthComponent,
+
 
 
   ],
   imports: [
     BrowserModule,
-    FormsModule,
+     AuthModule,
     ReactiveFormsModule,
     AppRoutingModule,
     HttpClientModule,
