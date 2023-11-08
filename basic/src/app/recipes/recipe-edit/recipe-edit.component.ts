@@ -9,7 +9,7 @@ import { RecipeService } from '../recipe.service';
   selector: 'app-recipe-edit',
   templateUrl: './recipe-edit.component.html',
   styleUrls: ['./recipe-edit.component.css'],
-  
+
 })
 
 
@@ -17,6 +17,10 @@ export class RecipeEditComponent implements OnInit  {
   id:number;
   editMode=false
   recipeForm:FormGroup
+
+  // get ingredientsControls(){
+  //   return(this.recipeForm.get('ingredients') as FormArray).controls
+  // }
 
   constructor(private route: ActivatedRoute,
     private recipeService:RecipeService,
