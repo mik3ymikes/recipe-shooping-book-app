@@ -4,14 +4,14 @@ import { Routes, RouterModule } from '@angular/router'
 
 
 
-import { AuthComponent } from './auth/auth.component'
-import { AuthGuard } from './auth/auth.guard'
 
 const appRoutes:Routes=[
   {path: '', redirectTo: '/recipes', pathMatch: 'full' },
+  {path:'recipes', loadChildren: ()=> import('./recipes/recipes.module')
+.then(m=> m.RecipesModule)}
 
 
- 
+
 
 ];
 
